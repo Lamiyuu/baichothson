@@ -70,20 +70,16 @@
             <artifactId>swing-datetime-picker</artifactId>
             <version>1.4.0</version>
         </dependency>
-        <dependency>
-            <groupId>raven.popup</groupId>
-            <artifactId>swing-glasspane-popup</artifactId>
-            <version>1.5.1</version>
-            <scope>system</scope>
-            <systemPath>C:\Users\Admin\Documents\NetBeansProjects\inserttable\libs\swing-glasspane-popup-1.5.1.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>raven.toast</groupId>
-            <artifactId>swing-toast-notifications</artifactId>
-            <version>1.0.3</version>
-            <scope>system</scope>
-            <systemPath>C:\Users\Admin\Documents\NetBeansProjects\inserttable\libs\swing-toast-notifications-1.0.3.jar</systemPath>
-        </dependency>
+           <dependency>
+        <groupId>raven.popup</groupId>
+        <artifactId>swing-glasspane-popup</artifactId>
+        <version>1.5.1</version>
+    </dependency>
+    <dependency>
+        <groupId>raven.toast</groupId>
+        <artifactId>swing-toast-notifications</artifactId>
+        <version>1.0.3</version>
+    </dependency>
     </dependencies>
 
     <build>
@@ -91,7 +87,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
+                <version>3.13.0</version>
                 <configuration>
                     <compilerArgs>
                         <arg>--enable-preview</arg>

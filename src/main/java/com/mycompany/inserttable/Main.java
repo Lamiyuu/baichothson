@@ -6,16 +6,19 @@ package com.mycompany.inserttable;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import static com.formdev.flatlaf.FlatClientProperties.TEXT_FIELD_LEADING_ICON;
+import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
-import com.mycompany.inserttable.Create;
 import java.awt.Font;
+import javax.management.Notification;
 import javax.swing.UIManager;
-import javax.swing.table.DefaultTableModel;
 import raven.popup.DefaultOption;
 import raven.popup.GlassPanePopup;
 import raven.popup.component.SimplePopupBorder;
+import raven.toast.Notifications;
+import sample.connection.DatabaseConnection;
+import sample.service.Service_khoanthu;
 import sample.table.CheckBoxTableHeaderRenderer;
 import sample.table.TableHeaderAlignment;
 
@@ -25,15 +28,15 @@ import sample.table.TableHeaderAlignment;
  */
 public class Main extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Main
-     */
+    public Service_khoanthu service = new Service_khoanthu();
     public Main() {
         initComponents();
         init();
+        
     }
     private void init(){
-   
+        GlassPanePopup.install(this);
+        Notifications.getInstance().setJFrame(this);
         panel.putClientProperty(FlatClientProperties.STYLE, ""
                 + "arc:25;"
                 + "background:$Table.background");
@@ -62,46 +65,27 @@ public class Main extends javax.swing.JFrame {
         ibTitle.putClientProperty(FlatClientProperties.STYLE, ""
                 + "font:bold +5;");
         txtSearch.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Search...");
-        txtSearch.putClientProperty(FlatClientProperties. TEXT_FIELD_LEADING_ICON, new FlatSVGIcon("sample/icon/search.svg"));
+        //txtSearch.putClientProperty(FlatClientProperties. TEXT_FIELD_LEADING_ICON, new FlatSVGIcon("sample/icon/search.svg"));
         txtSearch.putClientProperty(FlatClientProperties.STYLE, ""
-                + "arc:15"
-                + "borderWidth:0;"
-                + "foccusWidth:0;"
-                + "innerFocusWidth:0;"
-                + "margin:5,20,5,20;"
-                + "background:$Panel.background");
+                + "arc: 15;"
+                + "borderWidth: 0;"
+                + "focusWidth: 0;"
+                + "innerFocusWidth: 0;"
+                + "margin: 5, 20, 5, 20;"
+                + "background: $Panel.background;");
         
         
         table.getColumnModel().getColumn(0).setHeaderRenderer(new CheckBoxTableHeaderRenderer(table, 0));
         table.getTableHeader().setDefaultRenderer(new TableHeaderAlignment(table));
         
-        testData(); 
+        try {
+            DatabaseConnection.getInstance().connectToDatabase();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
  
-   
-    private void testData() {
-        DefaultTableModel model = (DefaultTableModel) table.getModel();
-        model.addRow(new Object[]{false, 1, "Steven Currie", "100", "26/10/2024", "Business Analyst", "Single", "stevecurrie.hust@gmail.com"});
-        model.addRow(new Object[]{false, 2, "John Doe", "101", "26/10/2024", "Software Engineer", "Married", "johndoe@example.com"});
-        model.addRow(new Object[]{false, 3, "Alice Smith", "102", "26/10/2024", "Product Manager", "Single", "alicesmith@example.com"});
-        model.addRow(new Object[]{false, 4, "Bob Johnson", "103", "26/10/2024", "Designer", "Married", "bobjohnson@example.com"});
-        model.addRow(new Object[]{false, 5, "Charlie Brown", "104", "26/10/2024", "Data Scientist", "Single", "charliebrown@example.com"});
-        model.addRow(new Object[]{false, 6, "Diana Prince", "105", "26/10/2024", "Marketing Manager", "Single", "dianaprince@example.com"});
-        model.addRow(new Object[]{false, 7, "Edward Elric", "106", "26/10/2024", "Mechanical Engineer", "Married", "edwardelric@example.com"});
-        model.addRow(new Object[]{false, 8, "Fiona Apple", "107", "26/10/2024", "Content Writer", "Single", "fionaapple@example.com"});
-        model.addRow(new Object[]{false, 9, "George Clooney", "108", "26/10/2024", "Actor", "Married", "georgeclooney@example.com"});
-        model.addRow(new Object[]{false, 10, "Hannah Montana", "109", "26/10/2024", "Musician", "Single", "hannahmontana@example.com"});
-        model.addRow(new Object[]{false, 11, "Ian Somerhalder", "110", "26/10/2024", "Actor", "Married", "iansomerhalder@example.com"});
-        model.addRow(new Object[]{false, 12, "Julia Roberts", "111", "26/10/2024", "Actress", "Single", "juliaroberts@example.com"});
-        model.addRow(new Object[]{false, 13, "Kevin Bacon", "112", "26/10/2024", "Director", "Married", "kevinbacon@example.com"});
-        model.addRow(new Object[]{false, 14, "Lily Collins", "113", "26/10/2024", "Fashion Designer", "Single", "lilycollins@example.com"});
-        model.addRow(new Object[]{false, 15, "Matthew McConaughey", "114", "26/10/2024", "Actor", "Married", "matthewmcconaughey@example.com"});
-        model.addRow(new Object[]{false, 16, "Natalie Portman", "115", "26/10/2024", "Actress", "Single", "natalieportman@example.com"});
-        model.addRow(new Object[]{false, 17, "Oscar Isaac", "116", "26/10/2024", "Actor", "Married", "oscarisaac@example.com"});
-        model.addRow(new Object[]{false, 18, "Penny Lane", "117", "26/10/2024", "Musician", "Single", "pennylane@example.com"});
-        model.addRow(new Object[]{false, 19, "Quentin Tarantino", "118", "26/10/2024", "Director", "Married", "quentintarantino@example.com"});
-        model.addRow(new Object[]{false, 20, "Rachel Green", "119", "26/10/2024", "Fashion Stylist", "Single", "rachelgreen@example.com"});
-    }
+  
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -112,9 +96,9 @@ public class Main extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         txtSearch = new javax.swing.JTextField();
         ibTitle = new javax.swing.JLabel();
-        buttonAction2 = new sample.swing.ButtonAction();
-        buttonAction1 = new sample.swing.ButtonAction();
-        buttonAction3 = new sample.swing.ButtonAction();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -125,7 +109,7 @@ public class Main extends javax.swing.JFrame {
 
             },
             new String [] {
-                "SELECT", "#", "NAME", "ROOM", "DATE", "Job", "INFORMATION", "Email"
+                "SELECT", "#", "Mã khoản thu", "Tên khoản thu", "Số tiền thu", "Ngày bắt đầu", "Ngày kết thúc", "Mô tả"
             }
         ) {
             Class[] types = new Class [] {
@@ -148,9 +132,10 @@ public class Main extends javax.swing.JFrame {
         if (table.getColumnModel().getColumnCount() > 0) {
             table.getColumnModel().getColumn(0).setMaxWidth(50);
             table.getColumnModel().getColumn(1).setMaxWidth(40);
-            table.getColumnModel().getColumn(3).setMaxWidth(100);
             table.getColumnModel().getColumn(4).setResizable(false);
-            table.getColumnModel().getColumn(6).setPreferredWidth(150);
+            table.getColumnModel().getColumn(5).setPreferredWidth(100);
+            table.getColumnModel().getColumn(5).setMaxWidth(100);
+            table.getColumnModel().getColumn(6).setPreferredWidth(100);
             table.getColumnModel().getColumn(6).setMaxWidth(100);
         }
 
@@ -160,26 +145,26 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
-        ibTitle.setText("RESIDENT");
+        ibTitle.setText("Quản lý cư dân");
 
-        buttonAction2.setText("Delete");
-        buttonAction2.addActionListener(new java.awt.event.ActionListener() {
+        jButton1.setText("New");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonAction2ActionPerformed(evt);
+                jButton1ActionPerformed(evt);
             }
         });
 
-        buttonAction1.setText("Edit");
-        buttonAction1.addActionListener(new java.awt.event.ActionListener() {
+        jButton2.setText("Edit");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonAction1ActionPerformed(evt);
+                jButton2ActionPerformed(evt);
             }
         });
 
-        buttonAction3.setText("New");
-        buttonAction3.addActionListener(new java.awt.event.ActionListener() {
+        jButton3.setText("Delete");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonAction3ActionPerformed(evt);
+                jButton3ActionPerformed(evt);
             }
         });
 
@@ -190,39 +175,42 @@ public class Main extends javax.swing.JFrame {
             .addGroup(panelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(scroll, javax.swing.GroupLayout.PREFERRED_SIZE, 957, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addComponent(jSeparator1)
+                        .addGap(10, 10, 10))
                     .addGroup(panelLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(ibTitle)
                             .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(6, 6, Short.MAX_VALUE)
-                        .addComponent(buttonAction3, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(buttonAction1, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(buttonAction2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12)))
-                .addGap(10, 10, 10))
-            .addComponent(scroll, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jButton3)
+                        .addGap(28, 28, 28))))
         );
         panelLayout.setVerticalGroup(
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
+            .addGroup(panelLayout.createSequentialGroup()
                 .addGap(10, 10, 10)
                 .addComponent(ibTitle)
                 .addGap(9, 9, 9)
-                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(buttonAction1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(buttonAction3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(buttonAction2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2)
+                    .addComponent(jButton3))
+                .addGap(11, 11, 11)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(scroll, javax.swing.GroupLayout.PREFERRED_SIZE, 555, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(8, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(scroll, javax.swing.GroupLayout.PREFERRED_SIZE, 564, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -230,7 +218,7 @@ public class Main extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(480, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(40, 40, 40))
         );
@@ -239,46 +227,71 @@ public class Main extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(9, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtSearchActionPerformed
-
+  
     private void buttonAction2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAction2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_buttonAction2ActionPerformed
+    // TODO add your handling code here:
+
 
     private void buttonAction1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAction1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_buttonAction1ActionPerformed
 
     private void buttonAction3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAction3ActionPerformed
-    Create create = new Create();
-    DefaultOption option = new DefaultOption(){
-     @Override
+   
+    }//GEN-LAST:event_buttonAction3ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+         Create create = new Create();
+         create.loadData(service);
+        DefaultOption option = new DefaultOption(){
+        @Override
            public boolean closeWhenClickOutside(){
                    return true;
            }
    };
-   
     String actions[] = new String[]{"Cancel", "Save"};
-    GlassPanePopup.showPopup(new SimplePopupBorder(create, "Create Resident", actions, (pc, i) ->{
+    GlassPanePopup.showPopup(new SimplePopupBorder(create, "Thêm khoản thu", actions, (pc, i) ->{
        if(i == 1){
-       // save
-        }else{
+           //save
+       try{
+           service.create(create.getData());
+           pc.closePopup();
+           Notifications.getInstance().show(Notifications.Type.SUCCESS, "Khoan thu moi da duoc tao");
+       } catch (Exception e){
+           e.printStackTrace();
+       }
+        }
+       
+       else{
           pc.closePopup();
        }
     }),option);
-    }//GEN-LAST:event_buttonAction3ActionPerformed
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSearchActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     public static void main(String args[]) {
      
         FlatRobotoFont.install();
+        FlatLaf.registerCustomDefaultsSource("sample.themes");
         UIManager.put("defaultFont", new Font(FlatRobotoFont.FAMILY, Font.PLAIN, 13));
         FlatMacLightLaf.setup();
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -289,10 +302,10 @@ public class Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private sample.swing.ButtonAction buttonAction1;
-    private sample.swing.ButtonAction buttonAction2;
-    private sample.swing.ButtonAction buttonAction3;
     private javax.swing.JLabel ibTitle;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JPanel panel;
     private javax.swing.JScrollPane scroll;
