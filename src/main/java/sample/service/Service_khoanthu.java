@@ -14,7 +14,7 @@ public void create(Model_khoanthu data) throws SQLException{
     PreparedStatement p = null;
     try{
          con = DatabaseConnection.getInstance().createConnection();
-         p = con.prepareStatement("insert into khoan thu (tenkhoanthu_id, sotienthu, ngaybatdauthu, ngayketthuc, mota) values(?,?,?,?,?)");
+         p = con.prepareStatement("insert into `khoan thu` (tenkhoanthu_id, sotienthu, ngaybatdauthu, ngayketthuc, mota) values(?,?,?,?,?)");
          p.setInt(1, data.getTenkhoanthu().getTenKhoanThuId());
          p.setInt(2, data.getSotienthu());
          p.setDate(3, data.getNgaybatdauthu());
