@@ -49,7 +49,8 @@ public class CheckBoxTableHeaderRenderer extends JCheckBox implements TableCellR
 
         // Listen for changes in the table to update the header checkbox state
         table.getModel().addTableModelListener((TableModelEvent tme) -> {
-            if (tme.getColumn() == column) {
+            if (tme.getColumn() == column||tme.getType() == TableModelEvent.DELETE) { 
+                // them cai ||tme.getType() == TableModelEvent.DELETE ô checkbox không đánh dấu các hàng khi bảng trống
                 checkRow();
             }
         });

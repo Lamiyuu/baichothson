@@ -10,7 +10,7 @@ public class DatabaseConnection {
     private final BasicDataSource dataSource;
     private final String host = "localhost";
     private final String port = "3306";
-    private final String database = "sample_dp";
+    private final String database = "quan ly khoan thu";
     private final String username = "root";
     private final String password = "";
 

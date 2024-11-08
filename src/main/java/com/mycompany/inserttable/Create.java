@@ -12,14 +12,37 @@ public class Create extends javax.swing.JPanel {
         initComponents();
         
     }
-    public void loadData(Service_khoanthu service){
+    //Sua pthuc loaddata
+    public void loadData(Service_khoanthu service, Model_khoanthu data){
         try{
             for(Model_loaikhoanthu pos:service.getService_loaikhoanthu().getAll()){
                 jComboBox1.addItem(pos); 
+                if(data != null&&data.getTenkhoanthu().getTenKhoanThuId()==pos.getTenKhoanThuId()){
+                    jComboBox1.setSelectedItem(pos);
+                }
+                
             }
         }catch(SQLException e){
             e.printStackTrace();
     }
+        if(data != null){
+            //khac mau video
+            //thieu cai txtName nhu mau ???
+            txtSotienthu.setValue(data.getSotienthu());
+            // Chuyển đổi Date sang String để dùng với setText()
+            if (data.getNgaybatdauthu() != null) {
+                txtNgaybatdauthu.setText(data.getNgaybatdauthu().toString());
+            } else {
+                txtNgaybatdauthu.setText(""); // Xử lý trường hợp null
+            }
+
+            if (data.getNgayketthuc() != null) {
+                txtNgayketthuc.setText(data.getNgayketthuc().toString());
+            } else {
+                txtNgayketthuc.setText(""); // Xử lý trường hợp null
+            }
+            txtMota.setText(data.getMota());
+         }
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

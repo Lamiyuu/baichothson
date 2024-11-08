@@ -10,10 +10,14 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import static com.formdev.flatlaf.util.MultiResolutionImageSupport.create;
 import java.awt.Font;
+import java.util.ArrayList;
 import java.util.List;
 import javax.management.Notification;
+import javax.swing.JLabel;
 import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import raven.popup.DefaultOption;
 import raven.popup.GlassPanePopup;
@@ -103,7 +107,24 @@ public class Main extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
-  
+    
+    
+    // Phuong thuc de Search trong bang
+    private void searchData(String search){
+        try {
+            DefaultTableModel model =(DefaultTableModel)table.getModel();
+            if(table.isEditing()){
+                table.getCellEditor().stopCellEditing();
+            }
+            model.setRowCount(0);
+            List<Model_khoanthu> list = service.search(search);
+            for(Model_khoanthu d:list){
+                model.addRow(d.toTableRow(table.getRowCount() + 1));
+            }
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -160,6 +181,11 @@ public class Main extends javax.swing.JFrame {
         txtSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtSearchActionPerformed(evt);
+            }
+        });
+        txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtSearchKeyReleased(evt);
             }
         });
 
@@ -268,7 +294,7 @@ public class Main extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
          Create create = new Create();
-         create.loadData(service);
+         create.loadData(service, null);
         DefaultOption option = new DefaultOption(){
         @Override
            public boolean closeWhenClickOutside(){
@@ -283,6 +309,7 @@ public class Main extends javax.swing.JFrame {
            service.create(create.getData());
            pc.closePopup();
            Notifications.getInstance().show(Notifications.Type.SUCCESS, "Khoan thu moi da duoc tao");
+           loadData(); // Thêm để khi xóa toàn bộ bảng, tạo Khoản thu mới thì hiện trên giao diện
        } catch (Exception e){
            e.printStackTrace();
        }
@@ -297,14 +324,102 @@ public class Main extends javax.swing.JFrame {
     private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtSearchActionPerformed
-
+// Nut edit trong bang
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+        List<Model_khoanthu> list = getSelectedData();
+        if (!list.isEmpty()){
+            if(list.size() == 1){
+                Model_khoanthu data = list.get(0);
+                Create create = new Create();
+                create.loadData(service, data);
+                DefaultOption option = new DefaultOption(){ // hien thi bang de minh edit
+            @Override
+           public boolean closeWhenClickOutside(){
+                   return true;
+           }
+            };
+             String actions[] = new String[]{"Cancel", "Update"};
+             GlassPanePopup.showPopup(new SimplePopupBorder(create, "Chỉnh sửa khoản thu ["+data.getTenkhoanthu()+"]", actions, (pc, i) ->{
+                if(i == 1){
+                    //edit
+                try{
+                    Model_khoanthu dataEdit = create.getData();
+                    dataEdit.setMakhoanthu(data.getMakhoanthu());
+                    service.edit(dataEdit);
+                    pc.closePopup();
+                    Notifications.getInstance().show(Notifications.Type.SUCCESS, "Khoản thu mới đã được cập nhật");
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+                 }
 
+                else{
+                   pc.closePopup();
+                }
+             }),option);
+            }else{
+                Notifications.getInstance().show(Notifications.Type.WARNING, "Hãy chọn duy nhất một khoản thu!");
+            }
+        } else{
+            Notifications.getInstance().show(Notifications.Type.WARNING, "Hãy chọn khoản thu để chỉnh sửa!");
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+    
+    // Lay du lieu tu vi tri ma nguoi dung chon de edit
+    //return List de chon nhieu hang
+    public List<Model_khoanthu> getSelectedData(){
+        List<Model_khoanthu> list = new ArrayList<>();
+        for(int i = 0; i<table.getRowCount(); i++){
+            if((boolean) table.getValueAt(i,0)){
+                Model_khoanthu data = (Model_khoanthu)table.getValueAt(i, 2);
+                list.add(data);
+            }
+        }
+        return list;
+    }
+    
+    //Nut delete
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+       List<Model_khoanthu> list = getSelectedData();
+        if (!list.isEmpty()){
+              DefaultOption option = new DefaultOption(){ // hien thi bang de minh edit
+            @Override
+           public boolean closeWhenClickOutside(){
+                   return true;
+           }
+            };
+             String actions[] = new String[]{"Cancel", "Delete"};
+             JLabel label = new JLabel("Bạn có muốn xóa " + list.size()+" khoản thu ?");
+             label.setBorder(new EmptyBorder(0, 25, 0, 25));
+             
+             GlassPanePopup.showPopup(new SimplePopupBorder(label, "Xác nhận xóa", actions, (pc, i) ->{
+                if(i == 1){
+                    //delete
+                try{
+                    //Chon nhieu hang de xoa
+                    for(Model_khoanthu d: list){
+                    service.delete(d.getMakhoanthu());
+                }
+                    pc.closePopup();
+                    Notifications.getInstance().show(Notifications.Type.SUCCESS, "Khoản thu đã được xoá");
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+                loadData();
+                 }
+
+                else{
+                   pc.closePopup();
+                }
+             }),option);
     }//GEN-LAST:event_jButton3ActionPerformed
+        else{
+            Notifications.getInstance().show(Notifications.Type.WARNING, "Hãy chọn khoản thu để xóa!");
+        }
+    } 
+    private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
+        searchData(txtSearch.getText().trim());
+    }//GEN-LAST:event_txtSearchKeyReleased
 
     public static void main(String args[]) {
      
