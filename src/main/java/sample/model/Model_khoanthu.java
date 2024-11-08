@@ -5,6 +5,10 @@
 package sample.model;
 
 import java.sql.Date;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 
 public class Model_khoanthu {
     public int makhoanthu;
@@ -72,4 +76,16 @@ public class Model_khoanthu {
     public void setMota(String mota) {
         this.mota = mota;
     }
+    
+    public Object[] toTableRow(int rowNum){
+        DateFormat df =new SimpleDateFormat("yyyy-MM-dd");
+        NumberFormat nf = new DecimalFormat("$ #, ##0.##");
+        return new Object[]{false, rowNum, this, tenkhoanthu, ngaybatdauthu == null ? "": df.format(ngaybatdauthu), ngayketthuc == null ? "": df.format(ngayketthuc), nf.format(sotienthu), mota};
+    }
+    
+    @Override
+    public String toString() {
+        return mota;
+    }
+
 }

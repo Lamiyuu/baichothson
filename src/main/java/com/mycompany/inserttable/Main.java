@@ -11,13 +11,16 @@ import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import java.awt.Font;
+import java.util.List;
 import javax.management.Notification;
 import javax.swing.UIManager;
+import javax.swing.table.DefaultTableModel;
 import raven.popup.DefaultOption;
 import raven.popup.GlassPanePopup;
 import raven.popup.component.SimplePopupBorder;
 import raven.toast.Notifications;
 import sample.connection.DatabaseConnection;
+import sample.model.Model_khoanthu;
 import sample.service.Service_khoanthu;
 import sample.table.CheckBoxTableHeaderRenderer;
 import sample.table.TableHeaderAlignment;
@@ -32,7 +35,7 @@ public class Main extends javax.swing.JFrame {
     public Main() {
         initComponents();
         init();
-        
+        loadData();
     }
     private void init(){
         GlassPanePopup.install(this);
@@ -84,7 +87,22 @@ public class Main extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
- 
+    
+    private void loadData(){
+        try {
+            DefaultTableModel model =(DefaultTableModel)table.getModel();
+            if(table.isEditing()){
+                table.getCellEditor().stopCellEditing();
+            }
+            model.setRowCount(0);
+            List<Model_khoanthu> list = service.getAll();
+            for(Model_khoanthu d:list){
+                model.addRow(d.toTableRow(table.getRowCount() + 1));
+            }
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+    }
   
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
