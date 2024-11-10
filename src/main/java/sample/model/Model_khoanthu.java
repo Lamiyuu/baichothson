@@ -80,7 +80,7 @@ public class Model_khoanthu {
     public Object[] toTableRow(int rowNum){
         DateFormat df =new SimpleDateFormat("yyyy-MM-dd");
         NumberFormat nf = new DecimalFormat("$ #, ##0.##");
-        return new Object[]{false, rowNum, this, tenkhoanthu, ngaybatdauthu == null ? "": df.format(ngaybatdauthu), ngayketthuc == null ? "": df.format(ngayketthuc), nf.format(sotienthu), mota};
+        return new Object[]{false, rowNum, makhoanthu, tenkhoanthu, ngaybatdauthu == null ? "": df.format(ngaybatdauthu), ngayketthuc == null ? "": df.format(ngayketthuc), nf.format(sotienthu), mota};
     }
     
     @Override

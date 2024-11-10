@@ -148,7 +148,7 @@ public class Main extends javax.swing.JFrame {
 
             },
             new String [] {
-                "SELECT", "#", "Mã khoản thu", "Tên khoản thu", "Số tiền thu", "Ngày bắt đầu", "Ngày kết thúc", "Mô tả"
+                "SELECT", "#", "Mã khoản thu", "Tên khoản thu", "Ngày bắt đầu", "Ngày kết thúc", "Số tiền nộp", "Mô tả"
             }
         ) {
             Class[] types = new Class [] {

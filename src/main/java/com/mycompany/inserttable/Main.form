@@ -120,9 +120,9 @@
                     <Column editable="false" title="#" type="java.lang.Object"/>
                     <Column editable="false" title="M&#xe3; kho&#x1ea3;n thu" type="java.lang.Object"/>
                     <Column editable="true" title="T&#xea;n kho&#x1ea3;n thu" type="java.lang.Object"/>
-                    <Column editable="false" title="S&#x1ed1; ti&#x1ec1;n thu" type="java.lang.Object"/>
                     <Column editable="false" title="Ng&#xe0;y b&#x1eaf;t &#x111;&#x1ea7;u" type="java.lang.Object"/>
                     <Column editable="false" title="Ng&#xe0;y k&#x1ebf;t th&#xfa;c" type="java.lang.Object"/>
+                    <Column editable="false" title="S&#x1ed1; ti&#x1ec1;n n&#x1ed9;p" type="java.lang.Object"/>
                     <Column editable="true" title="M&#xf4; t&#x1ea3;" type="java.lang.Object"/>
                   </Table>
                 </Property>
